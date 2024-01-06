@@ -1,24 +1,48 @@
 import java.util.*;
 
+import  domain.*;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-//        Collection<String> list = new TreeSet<>();
-//
-//        String[] names = {"Anna", "Bob", "Carol", "David", "Edna"};
-//        list.addAll(Arrays.asList(names));
-//        System.out.println(list);
-//
-//        list.add("Fred");
-//        list.addAll(Arrays.asList("George", "Gary", "Grace"));
-//        System.out.println(list);
-//        System.out.println("Gary is in the list? " + list.contains("Gary"));
-//
-//        list.removeIf(s -> s.charAt(0) == 'G');
-//        System.out.println(list);
-//        System.out.println("Gary is in the list? " + list.contains("Gary"));
-        List<Card> deck = Card.getStandardDeck();
-        Card.printDeck(deck);
+
+        List<Employee> employees = new ArrayList<>(List.of(
+                new Employee(10001, "Ralph", 2015),
+                new Employee(10005, "Carole", 2021),
+                new Employee(10022, "Jane", 2013),
+                new Employee(13151, "Laura", 2020),
+                new Employee(10050, "Jim", 2018) ));
+
+//        var comparator = new EmployeeComparator<>();
+//        employees.sort(comparator);
+
+        employees.sort(new Employee.EmployeeComparator<>("yearStarted")
+                .reversed());
+
+        for (Employee e : employees) {
+            System.out.println(e);
+        }
+
+        System.out.println("Store Members");
+
+        List<StoreEmployee> storeEmployees = new ArrayList<>(List.of(
+                new StoreEmployee(10015, "Meg", 2019,
+                        "Target"),
+                new StoreEmployee(10515, "Joe", 2021,
+                        "Walmart"),
+                new StoreEmployee(10105, "Tom", 2020,
+                        "Macys"),
+                new StoreEmployee(10215, "Marty", 2018,
+                        "Walmart"),
+                new StoreEmployee(10322, "Bud", 2016,
+                        "Target")));
+
+        var comparator = new StoreEmployee().new StoreComparator<>();
+        storeEmployees.sort(comparator);
+
+        for (StoreEmployee e : storeEmployees) {
+            System.out.println(e);
+        }
     }
 }
