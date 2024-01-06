@@ -3,22 +3,54 @@ import java.util.*;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+
+    record Person (String firstName, String lastName) {
+        @Override
+        public String toString() {
+            return firstName + " " + lastName;
+        }
+    }
     public static void main(String[] args) {
-//        Collection<String> list = new TreeSet<>();
-//
-//        String[] names = {"Anna", "Bob", "Carol", "David", "Edna"};
-//        list.addAll(Arrays.asList(names));
-//        System.out.println(list);
-//
-//        list.add("Fred");
-//        list.addAll(Arrays.asList("George", "Gary", "Grace"));
-//        System.out.println(list);
-//        System.out.println("Gary is in the list? " + list.contains("Gary"));
-//
-//        list.removeIf(s -> s.charAt(0) == 'G');
-//        System.out.println(list);
-//        System.out.println("Gary is in the list? " + list.contains("Gary"));
-        List<Card> deck = Card.getStandardDeck();
-        Card.printDeck(deck);
+
+        List<Person> people = new ArrayList<>(Arrays.asList(
+                new Main.Person("Lucy", "Van Pelt"),
+                new Person("Sally", "Brown"),
+                new Person("Linus", "Van Pelt"),
+                new Person("Peppermint", "Patty"),
+                new Person("Charlie", "Brown")));
+
+        // Using anonymous class
+        var comparatorLastName = new Comparator<Person>() {
+            @Override
+            public int compare(Person o1, Person o2) {
+                return o1.lastName().compareTo(o2.lastName());
+            }
+        };
+
+        people.sort((o1, o2) -> o1.lastName().compareTo(o2.lastName()));
+        // people.sort(comparatorLastName);
+        System.out.println(people);
+
+        interface EnhancedComparator<T> extends Comparator<T> {
+            int secondLevel(T o1, T o2);
+        }
+
+        var comparatorMixed = new EnhancedComparator<Person>() {
+
+            @Override
+            public int compare(Person o1, Person o2) {
+                int result = o1.lastName().compareTo(o2.lastName());
+                return (result == 0 ? secondLevel(o1, o2) : result);
+            }
+
+            @Override
+            public int secondLevel(Person o1, Person o2) {
+                return o1.firstName().compareTo(o2.firstName());
+            }
+        };
+
+        people.sort(comparatorMixed);
+        System.out.println(people);
+
     }
 }
